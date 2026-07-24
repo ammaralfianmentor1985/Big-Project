@@ -6,6 +6,16 @@ CRM, journaling, study tools, AI-powered research and slide decks — everything
 Built with **Flutter**, so the same codebase runs as a web app today and as native
 iOS / Android / Windows / macOS apps later.
 
+## One-time setup (do this once, then never again)
+
+Before the app can go live, GitHub Pages has to be switched on. GitHub does not let
+an automated workflow do this for you, so it needs one manual click:
+
+1. Go to **Settings → Pages** in this repository.
+2. Under **Build and deployment → Source**, choose **GitHub Actions**.
+
+That's it. Every push now builds the app and publishes it automatically.
+
 ## Use it on your iPhone
 
 1. Open **https://ammaralfianmentor1985.github.io/Big-Project/** in Safari.
