@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    The base href is replaced at build time by the `--base-href` argument
+    passed to `flutter build web` (see .github/workflows/deploy.yml).
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Tasks, people, journal, study and AI — all in one app.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#FF8A3D">
+
+  <!-- iOS: launch full-screen from the home screen, like a native app. -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Satu">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Satu</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    /* Match the app background so there is no white flash before Flutter boots. */
+    body {
+      margin: 0;
+      background-color: #FFF9F4;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { background-color: #201A17; }
+    }
+  </style>
+</head>
+<body>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
