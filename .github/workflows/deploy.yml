@@ -1,7 +1,10 @@
 # Prerequisite (one-time, done by a repo admin):
 #   Settings -> Pages -> Build and deployment -> Source: "GitHub Actions"
-# The workflow token is not allowed to turn Pages on by itself, so the deploy
-# job fails until that switch is flipped. The build job is independent of it.
+#
+# GitHub's auto-created "github-pages" environment only accepts deployments
+# from the repo's default branch. The deploy job is gated to `main` below so
+# feature-branch PRs get real analyze/test/build validation without a
+# structurally-expected-to-fail deploy job turning CI red.
 name: Build and deploy Satu
 
 on:
@@ -54,6 +57,7 @@ jobs:
 
   deploy:
     needs: build
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
