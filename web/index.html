@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#FF8A3D">
+  <meta name="description" content="Tasks, people, journal, study and AI — all in one app.">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Satu">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.json">
+
+  <title>Satu</title>
+  <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+
+  <!-- ===== Today ===== -->
+  <section id="screen-today" class="screen active" data-screen>
+    <header class="app-bar"><h1 data-t="todayTitle"></h1></header>
+    <main>
+      <div class="empty-state">
+        <div class="icon-circle" style="background: rgb(var(--sun-rgb) / 0.15)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--sun)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+        </div>
+        <h2 data-t="todayEmptyTitle"></h2>
+        <p data-t="todayEmptyBody"></p>
+      </div>
+    </main>
+  </section>
+
+  <!-- ===== People ===== -->
+  <section id="screen-people" class="screen" data-screen>
+    <header class="app-bar"><h1 data-t="peopleTitle"></h1></header>
+    <main>
+      <div class="empty-state">
+        <div class="icon-circle" style="background: rgb(var(--teal-rgb) / 0.15)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c.6-3.4 3.2-5.4 6.2-5.4s5.6 2 6.2 5.4"/><path d="M15.5 5.2a3.2 3.2 0 0 1 0 6.2M18.5 13.7c2.4.5 4.1 2.3 4.7 5.3"/></svg>
+        </div>
+        <h2 data-t="peopleEmptyTitle"></h2>
+        <p data-t="peopleEmptyBody"></p>
+      </div>
+    </main>
+  </section>
+
+  <!-- ===== Chat ===== -->
+  <section id="screen-chat" class="screen" data-screen>
+    <header class="app-bar"><h1 data-t="chatTitle"></h1></header>
+    <main>
+      <div class="empty-state" id="chat-no-key">
+        <div class="icon-circle" style="background: rgb(var(--grape-rgb) / 0.15)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--grape)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v10l-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5z"/><circle cx="12" cy="8" r="1.6" fill="var(--grape)" stroke="none"/></svg>
+        </div>
+        <h2 data-t="chatNeedsKeyTitle"></h2>
+        <p data-t="chatNeedsKeyBody"></p>
+        <button class="btn btn-filled action" id="chat-open-settings" data-t="chatNeedsKeyAction"></button>
+      </div>
+      <div class="empty-state" id="chat-ready" hidden>
+        <div class="icon-circle" style="background: rgb(var(--grape-rgb) / 0.15)">
+          <svg viewBox="0 0 24 24" fill="var(--grape)"><path d="M12 2l2.2 5.5L20 9.6l-5.5 2.3L12 17l-2.3-5.1L4 9.6l5.5-2.1z"/></svg>
+        </div>
+        <h2 data-t="chatEmptyTitle"></h2>
+        <p data-t="chatEmptyBody"></p>
+      </div>
+    </main>
+  </section>
+
+  <!-- ===== More ===== -->
+  <section id="screen-more" class="screen" data-screen>
+    <header class="app-bar"><h1 data-t="moreTitle"></h1></header>
+    <main>
+      <div style="display:flex; flex-direction:column; gap:12px; padding:8px 20px 24px;">
+        <div class="list-tile">
+          <div class="leading" style="background: rgb(var(--berry-rgb) / 0.15)">
+            <svg viewBox="0 0 24 24" fill="var(--berry)"><path d="M4 4h11a3 3 0 0 1 3 3v13l-2-1-2 1-2-1-2 1-2-1-2 1V6a2 2 0 0 1 2-2z"/></svg>
+          </div>
+          <div class="label" data-t="moreJournal"></div>
+          <div class="trailing" data-t="comingSoon"></div>
+        </div>
+        <div class="list-tile">
+          <div class="leading" style="background: rgb(var(--leaf-rgb) / 0.15)">
+            <svg viewBox="0 0 24 24" fill="var(--leaf)"><path d="M12 2 2 7l10 5 8-4v6h2V7L12 2z"/><path d="M6 12.2V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-3.8l-6 3-6-3z"/></svg>
+          </div>
+          <div class="label" data-t="moreStudy"></div>
+          <div class="trailing" data-t="comingSoon"></div>
+        </div>
+        <div class="list-tile">
+          <div class="leading" style="background: rgb(var(--sun-rgb) / 0.15)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--sun)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <div class="label" data-t="moreDecks"></div>
+          <div class="trailing" data-t="comingSoon"></div>
+        </div>
+        <div class="list-tile" id="open-settings" style="cursor:pointer">
+          <div class="leading" style="background: rgb(var(--mango-rgb) / 0.15)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--mango)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V19a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H4a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H10a1.7 1.7 0 0 0 1-1.5V4a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V10a1.7 1.7 0 0 0 1.5 1H20a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+          </div>
+          <div class="label" data-t="moreSettings"></div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <!-- ===== Settings (opened from More, not a tab) ===== -->
+  <section id="screen-settings" class="screen" data-screen>
+    <header class="app-bar" style="display:flex; align-items:center; gap:12px;">
+      <button class="btn btn-text" id="settings-back" style="padding:8px;" aria-label="Back">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h1 data-t="settingsTitle" style="font-size:22px;"></h1>
+    </header>
+    <main>
+      <div class="field-label" data-t="settingsAppearance"></div>
+      <div class="card settings-card">
+        <div class="settings-row">
+          <label data-t="settingsLanguage"></label>
+          <select id="select-locale">
+            <option value="system" data-t="settingsThemeSystem"></option>
+            <option value="en">English</option>
+            <option value="id">Bahasa Indonesia</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <label data-t="settingsTheme"></label>
+          <select id="select-theme">
+            <option value="system" data-t="settingsThemeSystem"></option>
+            <option value="light" data-t="settingsThemeLight"></option>
+            <option value="dark" data-t="settingsThemeDark"></option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-label" data-t="settingsAi"></div>
+      <div class="card settings-card">
+        <label for="input-api-key" data-t="settingsApiKey" style="display:block; margin-bottom:12px;"></label>
+        <input type="password" id="input-api-key" data-t-placeholder="settingsApiKeyHint" autocomplete="off">
+        <p class="help-text" data-t="settingsApiKeyHelp"></p>
+        <div style="display:flex; gap:12px; margin-top:16px;">
+          <button class="btn btn-filled" id="save-api-key" data-t="actionSave" style="flex:1;"></button>
+          <button class="btn btn-text" id="clear-api-key" data-t="actionClear"></button>
+        </div>
+      </div>
+      <div class="card settings-card">
+        <div class="settings-row">
+          <label data-t="settingsModel"></label>
+          <select id="select-model">
+            <option value="claude-opus-5" data-t="settingsModelOpus"></option>
+            <option value="claude-sonnet-5" data-t="settingsModelSonnet"></option>
+            <option value="claude-haiku-4-5" data-t="settingsModelHaiku"></option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-label" data-t="settingsAbout"></div>
+      <div class="card settings-card">
+        <div style="font-weight:700;" data-t="appName"></div>
+        <div class="help-text" data-t="appTagline" style="margin-top:4px;"></div>
+      </div>
+    </main>
+  </section>
+
+  <!-- ===== Bottom navigation ===== -->
+  <nav class="tabbar" role="tablist" aria-label="Satu navigation">
+    <button class="tab active" data-tab="today" role="tab" aria-selected="true">
+      <span class="icon-wrap">
+        <svg class="outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+        <svg class="filled" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/><path d="M12 1v3M12 20v3M23 12h-3M4 12H1M20.5 3.5l-2.1 2.1M5.6 18.4l-2.1 2.1M20.5 20.5l-2.1-2.1M5.6 5.6L3.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </span>
+      <span class="label" data-t="navToday"></span>
+    </button>
+    <button class="tab" data-tab="people" role="tab" aria-selected="false">
+      <span class="icon-wrap">
+        <svg class="outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c.6-3.4 3.2-5.4 6.2-5.4s5.6 2 6.2 5.4"/><path d="M15.5 5.2a3.2 3.2 0 0 1 0 6.2M18.5 13.7c2.4.5 4.1 2.3 4.7 5.3"/></svg>
+        <svg class="filled" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="8" r="3.6"/><path d="M1.6 20c.5-4 3.4-6.4 7.4-6.4S16.3 16 16.8 20z"/><path d="M15.8 4.6a3.6 3.6 0 0 1 0 7"/><path d="M18.3 13.6c2.7.6 4.6 2.7 5.1 6.4h-4.8"/></svg>
+      </span>
+      <span class="label" data-t="navPeople"></span>
+    </button>
+    <button class="tab" data-tab="chat" role="tab" aria-selected="false">
+      <span class="icon-wrap">
+        <svg class="outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9.4l-4.2 1.8L12 16l-1.8-4.8L6 9.4l4.2-1.8z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg>
+        <svg class="filled" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 5.5L20 9.6l-5.5 2.3L12 17l-2.3-5.1L4 9.6l5.5-2.1z"/><path d="M19.3 14l1 2.3 2.3 1-2.3 1-1 2.3-1-2.3-2.3-1 2.3-1z"/></svg>
+      </span>
+      <span class="label" data-t="navChat"></span>
+    </button>
+    <button class="tab" data-tab="more" role="tab" aria-selected="false">
+      <span class="icon-wrap">
+        <svg class="outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        <svg class="filled" viewBox="0 0 24 24" fill="currentColor"><rect x="2.5" y="2.5" width="8" height="8" rx="2"/><rect x="13.5" y="2.5" width="8" height="8" rx="2"/><rect x="2.5" y="13.5" width="8" height="8" rx="2"/><rect x="13.5" y="13.5" width="8" height="8" rx="2"/></svg>
+      </span>
+      <span class="label" data-t="navMore"></span>
+    </button>
+  </nav>
+
+  <script src="js/storage.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
