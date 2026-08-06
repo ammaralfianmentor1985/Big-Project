@@ -36,11 +36,11 @@ Rules for autonomous sessions:
 - [x] PWA manifest + app icons
 - [x] CI: validate HTML/JSON + run tests + deploy to GitHub Pages
 - [x] App icon: simple colorful mango-circle mark (`web/icons/`)
-- [ ] Shared `Tasks` store module (`web/js/tasks.js`) backed by `localStorage`, JSON-encoded
+- [x] Shared `Tasks` store module (`web/js/tasks.js`) backed by `localStorage`, JSON-encoded
       array of task records, with a matching `tests/tasks.test.js`
 
 ## Phase 1 — To-do
-- [ ] Task record shape: id, title, notes, due date, priority, done, list id
+- [x] Task record shape: id, title, notes, due date, priority, done, list id
 - [ ] Today screen: list of tasks due today / overdue, check off with a satisfying animation
 - [ ] Add/edit task form (title, notes, due date, priority) as an in-page panel like Settings
 - [ ] Task lists/projects (create, rename, delete; tasks belong to a list)
