@@ -36,7 +36,7 @@ const People = (() => {
       return readAll().find((p) => p.id === id) || null;
     },
 
-    add({ name, tags = [], birthday = null, notes = "" }) {
+    add({ name, tags = [], birthday = null, notes = "", followUpDate = null }) {
       const people = readAll();
       const person = {
         id: makeId(),
@@ -45,6 +45,7 @@ const People = (() => {
         tags: Array.isArray(tags) ? tags.map((tag) => tag.trim()).filter(Boolean) : [],
         birthday, // "MM-DD" or null — no birth year is tracked, just the annual date
         notes,
+        followUpDate, // "YYYY-MM-DD" or null — "reach out to this person by"
         interactions: [], // { id, type: "call"|"met"|"message", date, note }
         createdAt: new Date().toISOString(),
       };
@@ -63,13 +64,15 @@ const People = (() => {
     },
 
     // Appends a logged interaction and returns the updated person record.
+    // Logging any interaction counts as having reached out, so it clears a
+    // pending follow-up reminder rather than leaving it to nag forever.
     addInteraction(id, { type, date = null, note = "" }) {
       const people = readAll();
       const index = people.findIndex((p) => p.id === id);
       if (index === -1) return null;
       const interaction = { id: makeId("i"), type, date, note };
       const interactions = [...(people[index].interactions || []), interaction];
-      people[index] = { ...people[index], interactions };
+      people[index] = { ...people[index], interactions, followUpDate: null };
       writeAll(people);
       return people[index];
     },
@@ -107,6 +110,13 @@ const People = (() => {
     // People whose "MM-DD" birthday matches today's month and day.
     birthdaysOn(monthDay) {
       return readAll().filter((p) => p.birthday === monthDay);
+    },
+
+    // People with a follow-up date due today or overdue, soonest first.
+    dueForFollowUp(today) {
+      return readAll()
+        .filter((p) => p.followUpDate && p.followUpDate <= today)
+        .sort((a, b) => (a.followUpDate < b.followUpDate ? -1 : a.followUpDate > b.followUpDate ? 1 : 0));
     },
 
     clearAll() {

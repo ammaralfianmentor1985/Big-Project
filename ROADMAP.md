@@ -52,8 +52,8 @@ Rules for autonomous sessions:
 - [x] Person record shape: id, name, photo color, tags, birthday, notes
 - [x] People screen: searchable contact list
 - [x] Person detail panel: notes, interaction log (call/met/message + date + note)
-- [ ] Follow-up reminders (surface "reach out to X" on Today screen)
-- [ ] Birthdays and important dates on Today screen
+- [x] Follow-up reminders (surface "reach out to X" on Today screen)
+- [x] Birthdays and important dates on Today screen
 - [ ] Tests for people store: CRUD, interaction log, birthday lookup
 
 ## Phase 3 — AI core

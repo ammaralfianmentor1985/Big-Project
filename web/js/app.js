@@ -38,7 +38,93 @@ function priorityColorVar(priority) {
 
 let editingTaskId = null;
 
+function renderTodayBirthdays() {
+  const monthDay = todayDateOnly().slice(5);
+  const people = People.birthdaysOn(monthDay);
+
+  const section = document.getElementById("today-birthdays-section");
+  const container = document.getElementById("today-birthdays-items");
+  container.innerHTML = "";
+
+  if (people.length === 0) {
+    section.hidden = true;
+    return;
+  }
+  section.hidden = false;
+
+  people.forEach((person) => {
+    const row = document.createElement("div");
+    row.className = "list-tile";
+    row.style.cursor = "pointer";
+    row.addEventListener("click", () => openPersonForm(person.id));
+
+    const avatar = document.createElement("div");
+    avatar.className = "avatar-circle";
+    avatar.style.background = `var(${person.photoColor})`;
+    avatar.textContent = (person.name[0] || "?").toUpperCase();
+    row.appendChild(avatar);
+
+    const label = document.createElement("div");
+    label.className = "label";
+    label.textContent = person.name;
+    row.appendChild(label);
+
+    const trailing = document.createElement("div");
+    trailing.className = "trailing";
+    trailing.textContent = "🎂";
+    row.appendChild(trailing);
+
+    container.appendChild(row);
+  });
+}
+
+function renderTodayFollowUps() {
+  const today = todayDateOnly();
+  const people = People.dueForFollowUp(today);
+
+  const section = document.getElementById("today-followups-section");
+  const container = document.getElementById("today-followups-items");
+  container.innerHTML = "";
+
+  if (people.length === 0) {
+    section.hidden = true;
+    return;
+  }
+  section.hidden = false;
+
+  people.forEach((person) => {
+    const overdue = person.followUpDate < today;
+
+    const row = document.createElement("div");
+    row.className = "list-tile";
+    row.style.cursor = "pointer";
+    row.addEventListener("click", () => openPersonForm(person.id));
+
+    const avatar = document.createElement("div");
+    avatar.className = "avatar-circle";
+    avatar.style.background = `var(${person.photoColor})`;
+    avatar.textContent = (person.name[0] || "?").toUpperCase();
+    row.appendChild(avatar);
+
+    const label = document.createElement("div");
+    label.className = "label";
+    label.textContent = person.name;
+    row.appendChild(label);
+
+    const trailing = document.createElement("div");
+    trailing.className = "trailing";
+    trailing.textContent = overdue ? t("todayFollowUpOverdue") : t("todayFollowUpToday");
+    if (overdue) trailing.style.color = "var(--berry)";
+    row.appendChild(trailing);
+
+    container.appendChild(row);
+  });
+}
+
 function renderToday() {
+  renderTodayBirthdays();
+  renderTodayFollowUps();
+
   const today = todayDateOnly();
   const dueTasks = Tasks.getAll()
     .filter((task) => !task.done && task.dueDate && task.dueDate <= today)
@@ -247,6 +333,7 @@ function openPersonForm(personId) {
   document.getElementById("person-tags").value = person ? person.tags.join(", ") : "";
   document.getElementById("person-birthday").value =
     person && person.birthday ? `2000-${person.birthday}` : "";
+  document.getElementById("person-follow-up").value = person ? (person.followUpDate || "") : "";
   document.getElementById("person-notes").value = person ? person.notes : "";
   document.getElementById("person-delete").hidden = !editingPersonId;
 
@@ -349,6 +436,7 @@ function savePersonForm() {
     name,
     tags: document.getElementById("person-tags").value.split(",").map((tag) => tag.trim()).filter(Boolean),
     birthday: birthdayValue ? birthdayValue.slice(5) : null,
+    followUpDate: document.getElementById("person-follow-up").value || null,
     notes: document.getElementById("person-notes").value,
   };
 

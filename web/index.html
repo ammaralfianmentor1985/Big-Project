@@ -28,6 +28,14 @@
       </button>
     </header>
     <main>
+      <div id="today-birthdays-section" hidden>
+        <div class="field-label" data-t="todayBirthdaysTitle"></div>
+        <div id="today-birthdays-items" style="display:flex; flex-direction:column; gap:10px; padding:0 20px 8px;"></div>
+      </div>
+      <div id="today-followups-section" hidden>
+        <div class="field-label" data-t="todayFollowUpsTitle"></div>
+        <div id="today-followups-items" style="display:flex; flex-direction:column; gap:10px; padding:0 20px 8px;"></div>
+      </div>
       <div class="empty-state" id="today-empty">
         <div class="icon-circle" style="background: rgb(var(--sun-rgb) / 0.15)">
           <svg viewBox="0 0 24 24" fill="none" stroke="var(--sun)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
@@ -266,6 +274,10 @@
         <div class="settings-row">
           <label data-t="personFieldBirthday"></label>
           <input type="date" id="person-birthday" style="width:auto;">
+        </div>
+        <div class="settings-row">
+          <label data-t="personFieldFollowUp"></label>
+          <input type="date" id="person-follow-up" style="width:auto;">
         </div>
         <div>
           <label for="person-notes" data-t="personFieldNotes" style="display:block; margin-bottom:8px;"></label>

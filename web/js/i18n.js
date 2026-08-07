@@ -16,6 +16,10 @@ const STRINGS = {
     todayAddTask: "Add a task",
     todayOverdueBadge: "Overdue",
     todayDueTodayBadge: "Today",
+    todayBirthdaysTitle: "Birthdays today",
+    todayFollowUpsTitle: "Reach out to",
+    todayFollowUpOverdue: "Overdue",
+    todayFollowUpToday: "Today",
 
     taskFormTitleNew: "New task",
     taskFormTitleEdit: "Edit task",
@@ -44,6 +48,7 @@ const STRINGS = {
     personFieldTags: "Tags",
     personFieldTagsHint: "e.g. friend, coworker",
     personFieldBirthday: "Birthday",
+    personFieldFollowUp: "Follow up on",
     personFieldNotes: "Notes",
     personFieldNotesHint: "Add any details (optional)",
 
@@ -137,6 +142,10 @@ const STRINGS = {
     todayAddTask: "Tambah tugas",
     todayOverdueBadge: "Terlambat",
     todayDueTodayBadge: "Hari ini",
+    todayBirthdaysTitle: "Ulang tahun hari ini",
+    todayFollowUpsTitle: "Hubungi",
+    todayFollowUpOverdue: "Terlambat",
+    todayFollowUpToday: "Hari ini",
 
     taskFormTitleNew: "Tugas baru",
     taskFormTitleEdit: "Ubah tugas",
@@ -165,6 +174,7 @@ const STRINGS = {
     personFieldTags: "Tag",
     personFieldTagsHint: "mis. teman, rekan kerja",
     personFieldBirthday: "Ulang tahun",
+    personFieldFollowUp: "Hubungi lagi pada",
     personFieldNotes: "Catatan",
     personFieldNotesHint: "Tambahkan detail (opsional)",
 

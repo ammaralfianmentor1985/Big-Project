@@ -25,6 +25,7 @@ test("add creates a person with defaults, a trimmed name, and a photo color", ()
   assert.equal(person.birthday, null);
   assert.equal(person.notes, "");
   assert.deepEqual(person.interactions, []);
+  assert.equal(person.followUpDate, null);
   assert.equal(typeof person.photoColor, "string");
   assert.ok(person.photoColor.startsWith("--"));
   assert.equal(typeof person.id, "string");
@@ -140,6 +141,27 @@ test("removeInteraction deletes a logged interaction by id", () => {
 test("removeInteraction on an unknown person id returns null", () => {
   People.clearAll();
   assert.equal(People.removeInteraction("nonexistent", "whatever"), null);
+});
+
+test("addInteraction clears a pending follow-up date", () => {
+  People.clearAll();
+  const person = People.add({ name: "Contact", followUpDate: "2026-08-01" });
+  const updated = People.addInteraction(person.id, { type: "call", date: "2026-08-01" });
+  assert.equal(updated.followUpDate, null);
+});
+
+test("dueForFollowUp finds people due today or overdue, soonest first", () => {
+  People.clearAll();
+  People.add({ name: "Overdue", followUpDate: "2026-07-01" });
+  People.add({ name: "Due today", followUpDate: "2026-08-07" });
+  People.add({ name: "Future", followUpDate: "2026-09-01" });
+  People.add({ name: "No follow-up" });
+
+  assert.deepEqual(
+    People.dueForFollowUp("2026-08-07").map((p) => p.name),
+    ["Overdue", "Due today"]
+  );
+  assert.deepEqual(People.dueForFollowUp("2026-01-01"), []);
 });
 
 test("birthdaysOn finds people whose MM-DD birthday matches", () => {
