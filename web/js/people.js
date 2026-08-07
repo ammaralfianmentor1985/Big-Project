@@ -23,8 +23,8 @@ const People = (() => {
     localStorage.setItem(KEY, JSON.stringify(people));
   }
 
-  function makeId() {
-    return `p_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+  function makeId(prefix = "p") {
+    return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
   }
 
   return {
@@ -45,6 +45,7 @@ const People = (() => {
         tags: Array.isArray(tags) ? tags.map((tag) => tag.trim()).filter(Boolean) : [],
         birthday, // "MM-DD" or null — no birth year is tracked, just the annual date
         notes,
+        interactions: [], // { id, type: "call"|"met"|"message", date, note }
         createdAt: new Date().toISOString(),
       };
       people.push(person);
@@ -57,6 +58,28 @@ const People = (() => {
       const index = people.findIndex((p) => p.id === id);
       if (index === -1) return null;
       people[index] = { ...people[index], ...changes, id: people[index].id };
+      writeAll(people);
+      return people[index];
+    },
+
+    // Appends a logged interaction and returns the updated person record.
+    addInteraction(id, { type, date = null, note = "" }) {
+      const people = readAll();
+      const index = people.findIndex((p) => p.id === id);
+      if (index === -1) return null;
+      const interaction = { id: makeId("i"), type, date, note };
+      const interactions = [...(people[index].interactions || []), interaction];
+      people[index] = { ...people[index], interactions };
+      writeAll(people);
+      return people[index];
+    },
+
+    removeInteraction(id, interactionId) {
+      const people = readAll();
+      const index = people.findIndex((p) => p.id === id);
+      if (index === -1) return null;
+      const interactions = (people[index].interactions || []).filter((i) => i.id !== interactionId);
+      people[index] = { ...people[index], interactions };
       writeAll(people);
       return people[index];
     },

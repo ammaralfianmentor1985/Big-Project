@@ -24,6 +24,7 @@ test("add creates a person with defaults, a trimmed name, and a photo color", ()
   assert.deepEqual(person.tags, []);
   assert.equal(person.birthday, null);
   assert.equal(person.notes, "");
+  assert.deepEqual(person.interactions, []);
   assert.equal(typeof person.photoColor, "string");
   assert.ok(person.photoColor.startsWith("--"));
   assert.equal(typeof person.id, "string");
@@ -99,6 +100,46 @@ test("search matches by name or tag, case-insensitively, sorted alphabetically",
     ["Amir"]
   );
   assert.deepEqual(People.search("nobody"), []);
+});
+
+test("addInteraction appends a logged interaction with a generated id", () => {
+  People.clearAll();
+  const person = People.add({ name: "Contact" });
+  const updated = People.addInteraction(person.id, { type: "call", date: "2026-08-07", note: "Caught up" });
+  assert.equal(updated.interactions.length, 1);
+  const interaction = updated.interactions[0];
+  assert.equal(interaction.type, "call");
+  assert.equal(interaction.date, "2026-08-07");
+  assert.equal(interaction.note, "Caught up");
+  assert.equal(typeof interaction.id, "string");
+  assert.ok(interaction.id.length > 0);
+});
+
+test("addInteraction on an unknown person id returns null", () => {
+  People.clearAll();
+  assert.equal(People.addInteraction("nonexistent", { type: "call" }), null);
+});
+
+test("multiple interactions accumulate in the order they were added", () => {
+  People.clearAll();
+  const person = People.add({ name: "Contact" });
+  People.addInteraction(person.id, { type: "call", date: "2026-08-01" });
+  const updated = People.addInteraction(person.id, { type: "message", date: "2026-08-05" });
+  assert.deepEqual(updated.interactions.map((i) => i.type), ["call", "message"]);
+});
+
+test("removeInteraction deletes a logged interaction by id", () => {
+  People.clearAll();
+  const person = People.add({ name: "Contact" });
+  const withOne = People.addInteraction(person.id, { type: "met", date: "2026-08-01" });
+  const interactionId = withOne.interactions[0].id;
+  const after = People.removeInteraction(person.id, interactionId);
+  assert.deepEqual(after.interactions, []);
+});
+
+test("removeInteraction on an unknown person id returns null", () => {
+  People.clearAll();
+  assert.equal(People.removeInteraction("nonexistent", "whatever"), null);
 });
 
 test("birthdaysOn finds people whose MM-DD birthday matches", () => {

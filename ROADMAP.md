@@ -51,7 +51,7 @@ Rules for autonomous sessions:
 ## Phase 2 — Personal CRM
 - [x] Person record shape: id, name, photo color, tags, birthday, notes
 - [x] People screen: searchable contact list
-- [ ] Person detail panel: notes, interaction log (call/met/message + date + note)
+- [x] Person detail panel: notes, interaction log (call/met/message + date + note)
 - [ ] Follow-up reminders (surface "reach out to X" on Today screen)
 - [ ] Birthdays and important dates on Today screen
 - [ ] Tests for people store: CRUD, interaction log, birthday lookup

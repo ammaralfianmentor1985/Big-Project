@@ -47,6 +47,14 @@ const STRINGS = {
     personFieldNotes: "Notes",
     personFieldNotesHint: "Add any details (optional)",
 
+    personInteractionsTitle: "Interactions",
+    personInteractionsAdd: "Log interaction",
+    personInteractionsEmpty: "No interactions logged yet.",
+    interactionTypeCall: "Call",
+    interactionTypeMet: "Met in person",
+    interactionTypeMessage: "Message",
+    interactionNoteHint: "Note (optional)",
+
     chatTitle: "Ask anything",
     chatEmptyTitle: "Your AI assistant",
     chatEmptyBody: "Research anything, summarize your notes, or plan your day.",
@@ -159,6 +167,14 @@ const STRINGS = {
     personFieldBirthday: "Ulang tahun",
     personFieldNotes: "Catatan",
     personFieldNotesHint: "Tambahkan detail (opsional)",
+
+    personInteractionsTitle: "Interaksi",
+    personInteractionsAdd: "Catat interaksi",
+    personInteractionsEmpty: "Belum ada interaksi tercatat.",
+    interactionTypeCall: "Telepon",
+    interactionTypeMet: "Bertemu langsung",
+    interactionTypeMessage: "Pesan",
+    interactionNoteHint: "Catatan (opsional)",
 
     chatTitle: "Tanya apa saja",
     chatEmptyTitle: "Asisten AI kamu",

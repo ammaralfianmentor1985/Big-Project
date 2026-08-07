@@ -250,6 +250,14 @@ function openPersonForm(personId) {
   document.getElementById("person-notes").value = person ? person.notes : "";
   document.getElementById("person-delete").hidden = !editingPersonId;
 
+  document.getElementById("person-interactions-section").hidden = !editingPersonId;
+  if (editingPersonId) {
+    document.getElementById("interaction-type").value = "call";
+    document.getElementById("interaction-date").value = todayDateOnly();
+    document.getElementById("interaction-note").value = "";
+    renderPersonInteractions();
+  }
+
   document.querySelectorAll("[data-screen]").forEach((el) => {
     el.classList.toggle("active", el.id === "screen-person-form");
   });
@@ -257,6 +265,79 @@ function openPersonForm(personId) {
 
 function closePersonForm() {
   showTab("people");
+}
+
+const INTERACTION_ICONS = {
+  call: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2 2C9.5 21 3 14.5 3 6a2 2 0 0 1 1-2z"/></svg>',
+  met: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c.6-3.4 3.2-5.4 6.2-5.4s5.6 2 6.2 5.4"/><path d="M15.5 5.2a3.2 3.2 0 0 1 0 6.2M18.5 13.7c2.4.5 4.1 2.3 4.7 5.3"/></svg>',
+  message: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4V5z"/></svg>',
+};
+
+const INTERACTION_TYPE_KEYS = {
+  call: "interactionTypeCall",
+  met: "interactionTypeMet",
+  message: "interactionTypeMessage",
+};
+
+function renderPersonInteractions() {
+  const person = editingPersonId ? People.get(editingPersonId) : null;
+  const items = (person && person.interactions) || [];
+  const container = document.getElementById("person-interactions-items");
+  container.innerHTML = "";
+
+  if (items.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "help-text";
+    empty.textContent = t("personInteractionsEmpty");
+    container.appendChild(empty);
+    return;
+  }
+
+  [...items].reverse().forEach((interaction) => {
+    const row = document.createElement("div");
+    row.className = "list-tile";
+
+    const icon = document.createElement("div");
+    icon.className = "leading";
+    icon.style.background = "rgb(var(--teal-rgb) / 0.15)";
+    icon.style.color = "var(--teal)";
+    icon.innerHTML = INTERACTION_ICONS[interaction.type] || INTERACTION_ICONS.met;
+    row.appendChild(icon);
+
+    const label = document.createElement("div");
+    label.className = "label";
+    label.textContent = interaction.note || t(INTERACTION_TYPE_KEYS[interaction.type] || "interactionTypeMet");
+    row.appendChild(label);
+
+    const trailing = document.createElement("div");
+    trailing.className = "trailing";
+    trailing.textContent = interaction.date || "";
+    row.appendChild(trailing);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "btn btn-text";
+    deleteBtn.style.padding = "8px";
+    deleteBtn.setAttribute("aria-label", "Delete interaction");
+    deleteBtn.innerHTML =
+      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+    deleteBtn.addEventListener("click", () => {
+      People.removeInteraction(editingPersonId, interaction.id);
+      renderPersonInteractions();
+    });
+    row.appendChild(deleteBtn);
+
+    container.appendChild(row);
+  });
+}
+
+function addInteraction() {
+  if (!editingPersonId) return;
+  const type = document.getElementById("interaction-type").value;
+  const date = document.getElementById("interaction-date").value || null;
+  const note = document.getElementById("interaction-note").value.trim();
+  People.addInteraction(editingPersonId, { type, date, note });
+  document.getElementById("interaction-note").value = "";
+  renderPersonInteractions();
 }
 
 function savePersonForm() {
@@ -535,6 +616,7 @@ function wireEvents() {
   document.getElementById("person-form-back").addEventListener("click", closePersonForm);
   document.getElementById("person-save").addEventListener("click", savePersonForm);
   document.getElementById("person-delete").addEventListener("click", deletePersonForm);
+  document.getElementById("interaction-add").addEventListener("click", addInteraction);
 }
 
 function init() {

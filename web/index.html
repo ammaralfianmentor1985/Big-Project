@@ -276,6 +276,23 @@
         <button class="btn btn-filled" id="person-save" data-t="actionSave" style="flex:1;"></button>
         <button class="btn btn-text" id="person-delete" data-t="actionDelete" hidden></button>
       </div>
+
+      <div id="person-interactions-section" hidden>
+        <div class="field-label" data-t="personInteractionsTitle"></div>
+        <div class="card settings-card" style="display:flex; flex-direction:column; gap:12px;">
+          <div style="display:flex; gap:12px;">
+            <select id="interaction-type" style="flex:1;">
+              <option value="call" data-t="interactionTypeCall"></option>
+              <option value="met" data-t="interactionTypeMet"></option>
+              <option value="message" data-t="interactionTypeMessage"></option>
+            </select>
+            <input type="date" id="interaction-date" style="flex:1;">
+          </div>
+          <input type="text" id="interaction-note" data-t-placeholder="interactionNoteHint" autocomplete="off">
+          <button class="btn btn-filled" id="interaction-add" data-t="personInteractionsAdd"></button>
+        </div>
+        <div id="person-interactions-items" style="display:flex; flex-direction:column; gap:10px; padding:8px 20px 24px;"></div>
+      </div>
     </main>
   </section>
 
