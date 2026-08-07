@@ -299,6 +299,10 @@ label { font-size: 14px; font-weight: 600; }
   transition: background-color 150ms ease, border-color 150ms ease;
 }
 .task-check:hover { border-color: var(--mango); }
+.task-check.task-check-done {
+  background: var(--mango);
+  border-color: var(--mango);
+}
 .priority-dot {
   width: 8px;
   height: 8px;

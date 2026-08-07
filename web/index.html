@@ -101,6 +101,13 @@
           <div class="label" data-t="moreDecks"></div>
           <div class="trailing" data-t="comingSoon"></div>
         </div>
+        <div class="list-tile" id="open-all-tasks" style="cursor:pointer">
+          <div class="leading" style="background: rgb(var(--grape-rgb) / 0.15)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--grape)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l1.5 1.5L14 4"/><path d="M9 12l1.5 1.5L14 10"/><path d="M9 18l1.5 1.5L14 15"/><path d="M17 6h2M17 12h2M17 18h2"/></svg>
+          </div>
+          <div class="label" data-t="moreAllTasks"></div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
         <div class="list-tile" id="open-lists" style="cursor:pointer">
           <div class="leading" style="background: rgb(var(--teal-rgb) / 0.15)">
             <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="4" rx="1.5"/><rect x="4" y="12" width="16" height="4" rx="1.5"/><rect x="4" y="19" width="10" height="1.5" rx="0.75"/></svg>
@@ -225,6 +232,44 @@
       <div style="display:flex; gap:12px; padding:16px 20px 0;">
         <button class="btn btn-filled" id="task-save" data-t="actionSave" style="flex:1;"></button>
         <button class="btn btn-text" id="task-delete" data-t="actionDelete" hidden></button>
+      </div>
+    </main>
+  </section>
+
+  <!-- ===== All tasks (opened from More, not a tab) ===== -->
+  <section id="screen-all-tasks" class="screen" data-screen>
+    <header class="app-bar" style="display:flex; align-items:center; gap:12px;">
+      <button class="btn btn-text" id="all-tasks-back" style="padding:8px;" aria-label="Back">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h1 data-t="allTasksTitle" style="font-size:22px;"></h1>
+    </header>
+    <main>
+      <div class="card settings-card" style="display:flex; flex-direction:column; gap:12px;">
+        <input type="text" id="all-tasks-search" data-t-placeholder="allTasksSearchHint" autocomplete="off">
+        <div class="settings-row">
+          <label data-t="allTasksFilterListLabel"></label>
+          <select id="all-tasks-filter-list">
+            <option value="" data-t="allTasksFilterListAll"></option>
+            <option value="unassigned" data-t="taskListNone"></option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <label data-t="allTasksFilterStatusLabel"></label>
+          <select id="all-tasks-filter-status">
+            <option value="all" data-t="allTasksFilterStatusAll"></option>
+            <option value="active" data-t="allTasksFilterStatusActive"></option>
+            <option value="done" data-t="allTasksFilterStatusDone"></option>
+          </select>
+        </div>
+      </div>
+      <div id="all-tasks-items" hidden style="display:flex; flex-direction:column; gap:10px; padding:8px 20px 24px;"></div>
+      <div class="empty-state" id="all-tasks-empty">
+        <div class="icon-circle" style="background: rgb(var(--grape-rgb) / 0.15)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--grape)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        </div>
+        <h2 data-t="allTasksEmptyTitle"></h2>
+        <p data-t="allTasksEmptyBody"></p>
       </div>
     </main>
   </section>

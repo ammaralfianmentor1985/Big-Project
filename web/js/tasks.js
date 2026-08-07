@@ -22,6 +22,10 @@ const Tasks = (() => {
     return `t_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
   }
 
+  // Kept local to this module (rather than shared with app.js's Today
+  // sorting) so tasks.js has no dependency on the DOM-glue file.
+  const PRIORITY_ORDER = { high: 0, medium: 1, low: 2, none: 3 };
+
   // "YYYY-MM-DD" + a recurrence rule -> the next "YYYY-MM-DD" due date.
   function advanceDate(dueDate, recurrence) {
     const [y, m, d] = dueDate.split("-").map(Number);
@@ -88,6 +92,32 @@ const Tasks = (() => {
       const next = tasks.filter((t) => t.id !== id);
       writeAll(next);
       return next.length !== tasks.length;
+    },
+
+    // query: substring match on title (case-insensitive).
+    // listId: "" = any list, "unassigned" = no list, else a specific list id.
+    // status: "all" | "active" | "done".
+    search({ query = "", listId = "", status = "all" } = {}) {
+      const q = query.trim().toLowerCase();
+      return readAll()
+        .filter((task) => {
+          if (q && !task.title.toLowerCase().includes(q)) return false;
+          if (listId === "unassigned") {
+            if (task.listId) return false;
+          } else if (listId && task.listId !== listId) {
+            return false;
+          }
+          if (status === "active" && task.done) return false;
+          if (status === "done" && !task.done) return false;
+          return true;
+        })
+        .sort((a, b) => {
+          if (a.done !== b.done) return a.done ? 1 : -1;
+          const aDate = a.dueDate || "9999-99-99";
+          const bDate = b.dueDate || "9999-99-99";
+          if (aDate !== bDate) return aDate < bDate ? -1 : 1;
+          return (PRIORITY_ORDER[a.priority] ?? 3) - (PRIORITY_ORDER[b.priority] ?? 3);
+        });
     },
 
     clearAll() {

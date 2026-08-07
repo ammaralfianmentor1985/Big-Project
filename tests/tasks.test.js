@@ -113,3 +113,65 @@ test("complete on an unknown id returns null", () => {
   Tasks.clearAll();
   assert.equal(Tasks.complete("nonexistent"), null);
 });
+
+test("search filters by title substring, case-insensitively", () => {
+  Tasks.clearAll();
+  Tasks.add({ title: "Buy milk" });
+  Tasks.add({ title: "Walk the dog" });
+  const results = Tasks.search({ query: "MILK" });
+  assert.equal(results.length, 1);
+  assert.equal(results[0].title, "Buy milk");
+});
+
+test("search filters by list: specific list, unassigned, and all", () => {
+  Tasks.clearAll();
+  Tasks.add({ title: "In list A", listId: "list-a" });
+  Tasks.add({ title: "In list B", listId: "list-b" });
+  Tasks.add({ title: "No list" });
+
+  assert.deepEqual(
+    Tasks.search({ listId: "list-a" }).map((t) => t.title),
+    ["In list A"]
+  );
+  assert.deepEqual(
+    Tasks.search({ listId: "unassigned" }).map((t) => t.title),
+    ["No list"]
+  );
+  assert.equal(Tasks.search({ listId: "" }).length, 3);
+});
+
+test("search filters by status: all, active, done", () => {
+  Tasks.clearAll();
+  const a = Tasks.add({ title: "Active task" });
+  const b = Tasks.add({ title: "Done task" });
+  Tasks.update(b.id, { done: true });
+
+  assert.equal(Tasks.search({ status: "all" }).length, 2);
+  assert.deepEqual(
+    Tasks.search({ status: "active" }).map((t) => t.title),
+    ["Active task"]
+  );
+  assert.deepEqual(
+    Tasks.search({ status: "done" }).map((t) => t.title),
+    ["Done task"]
+  );
+});
+
+test("search sorts active before done, then by due date, then priority", () => {
+  Tasks.clearAll();
+  const done = Tasks.add({ title: "Already done", dueDate: "2026-01-01" });
+  Tasks.update(done.id, { done: true });
+  Tasks.add({ title: "Later, low priority", dueDate: "2026-08-15", priority: "low" });
+  Tasks.add({ title: "Later, high priority", dueDate: "2026-08-15", priority: "high" });
+  Tasks.add({ title: "Sooner", dueDate: "2026-08-01" });
+  Tasks.add({ title: "No due date" });
+
+  const titles = Tasks.search().map((t) => t.title);
+  assert.deepEqual(titles, [
+    "Sooner",
+    "Later, high priority",
+    "Later, low priority",
+    "No due date",
+    "Already done",
+  ]);
+});

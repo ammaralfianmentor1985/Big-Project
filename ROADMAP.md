@@ -45,7 +45,7 @@ Rules for autonomous sessions:
 - [x] Add/edit task form (title, notes, due date, priority) as an in-page panel like Settings
 - [x] Task lists/projects (create, rename, delete; tasks belong to a list)
 - [x] Recurring tasks (daily/weekly/monthly)
-- [ ] All-tasks view with filters (list, done/undone, search)
+- [x] All-tasks view with filters (list, done/undone, search)
 - [x] Tests for task store: add/edit/complete/delete, recurrence rollover
 
 ## Phase 2 — Personal CRM

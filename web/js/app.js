@@ -185,6 +185,110 @@ function deleteTaskForm() {
   closeTaskForm();
 }
 
+function renderAllTasksListFilterOptions() {
+  const select = document.getElementById("all-tasks-filter-list");
+  const current = select.value;
+
+  select.innerHTML = "";
+  const allOption = document.createElement("option");
+  allOption.value = "";
+  allOption.textContent = t("allTasksFilterListAll");
+  select.appendChild(allOption);
+
+  const unassignedOption = document.createElement("option");
+  unassignedOption.value = "unassigned";
+  unassignedOption.textContent = t("taskListNone");
+  select.appendChild(unassignedOption);
+
+  Lists.getAll().forEach((list) => {
+    const option = document.createElement("option");
+    option.value = list.id;
+    option.textContent = list.name;
+    select.appendChild(option);
+  });
+
+  select.value = current;
+}
+
+function renderAllTasks() {
+  const results = Tasks.search({
+    query: document.getElementById("all-tasks-search").value,
+    listId: document.getElementById("all-tasks-filter-list").value,
+    status: document.getElementById("all-tasks-filter-status").value,
+  });
+
+  const container = document.getElementById("all-tasks-items");
+  const emptyEl = document.getElementById("all-tasks-empty");
+
+  container.innerHTML = "";
+  if (results.length === 0) {
+    container.hidden = true;
+    emptyEl.hidden = false;
+    return;
+  }
+  emptyEl.hidden = true;
+  container.hidden = false;
+
+  const today = todayDateOnly();
+
+  results.forEach((task) => {
+    const row = document.createElement("div");
+    row.className = "list-tile task-tile";
+    row.addEventListener("click", () => openTaskForm(task.id));
+
+    const check = document.createElement("button");
+    check.className = "task-check";
+    check.classList.toggle("task-check-done", task.done);
+    check.setAttribute("aria-label", "Toggle task done");
+    check.addEventListener("click", (event) => {
+      event.stopPropagation();
+      if (task.done) Tasks.update(task.id, { done: false });
+      else Tasks.complete(task.id);
+      renderAllTasks();
+    });
+    row.appendChild(check);
+
+    const colorVar = priorityColorVar(task.priority);
+    if (colorVar) {
+      const dot = document.createElement("span");
+      dot.className = "priority-dot";
+      dot.style.background = colorVar;
+      row.appendChild(dot);
+    }
+
+    const label = document.createElement("div");
+    label.className = "label";
+    label.textContent = task.title;
+    if (task.done) {
+      label.style.textDecoration = "line-through";
+      label.style.color = "var(--ink-soft)";
+    }
+    row.appendChild(label);
+
+    const trailing = document.createElement("div");
+    trailing.className = "trailing";
+    trailing.textContent = task.dueDate || t("allTasksNoDueDate");
+    if (task.dueDate && task.dueDate < today && !task.done) {
+      trailing.style.color = "var(--berry)";
+    }
+    row.appendChild(trailing);
+
+    container.appendChild(row);
+  });
+}
+
+function openAllTasks() {
+  renderAllTasksListFilterOptions();
+  renderAllTasks();
+  document.querySelectorAll("[data-screen]").forEach((el) => {
+    el.classList.toggle("active", el.id === "screen-all-tasks");
+  });
+}
+
+function closeAllTasks() {
+  showTab("more");
+}
+
 const LIST_DOT_COLORS = ["--teal", "--grape", "--berry", "--leaf", "--sun", "--mango"];
 
 function renderLists() {
@@ -322,6 +426,12 @@ function wireEvents() {
   document.getElementById("open-lists").addEventListener("click", openLists);
   document.getElementById("lists-back").addEventListener("click", closeLists);
   document.getElementById("add-list").addEventListener("click", addList);
+
+  document.getElementById("open-all-tasks").addEventListener("click", openAllTasks);
+  document.getElementById("all-tasks-back").addEventListener("click", closeAllTasks);
+  document.getElementById("all-tasks-search").addEventListener("input", renderAllTasks);
+  document.getElementById("all-tasks-filter-list").addEventListener("change", renderAllTasks);
+  document.getElementById("all-tasks-filter-status").addEventListener("change", renderAllTasks);
 }
 
 function init() {
