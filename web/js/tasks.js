@@ -22,6 +22,16 @@ const Tasks = (() => {
     return `t_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
   }
 
+  // "YYYY-MM-DD" + a recurrence rule -> the next "YYYY-MM-DD" due date.
+  function advanceDate(dueDate, recurrence) {
+    const [y, m, d] = dueDate.split("-").map(Number);
+    const date = new Date(Date.UTC(y, m - 1, d));
+    if (recurrence === "daily") date.setUTCDate(date.getUTCDate() + 1);
+    else if (recurrence === "weekly") date.setUTCDate(date.getUTCDate() + 7);
+    else if (recurrence === "monthly") date.setUTCMonth(date.getUTCMonth() + 1);
+    return date.toISOString().slice(0, 10);
+  }
+
   return {
     getAll() {
       return readAll();
@@ -31,7 +41,7 @@ const Tasks = (() => {
       return readAll().find((t) => t.id === id) || null;
     },
 
-    add({ title, notes = "", dueDate = null, priority = "none", listId = null }) {
+    add({ title, notes = "", dueDate = null, priority = "none", listId = null, recurrence = "none" }) {
       const task = {
         id: makeId(),
         title: (title || "").trim(),
@@ -40,6 +50,7 @@ const Tasks = (() => {
         priority, // "none" | "low" | "medium" | "high"
         done: false,
         listId,
+        recurrence, // "none" | "daily" | "weekly" | "monthly"
         createdAt: new Date().toISOString(),
       };
       const tasks = readAll();
@@ -53,6 +64,21 @@ const Tasks = (() => {
       const index = tasks.findIndex((t) => t.id === id);
       if (index === -1) return null;
       tasks[index] = { ...tasks[index], ...changes, id: tasks[index].id };
+      writeAll(tasks);
+      return tasks[index];
+    },
+
+    // Marks a task done — unless it recurs, in which case its due date
+    // rolls forward instead and it stays undone for the next occurrence.
+    complete(id) {
+      const tasks = readAll();
+      const index = tasks.findIndex((t) => t.id === id);
+      if (index === -1) return null;
+      const task = tasks[index];
+      tasks[index] =
+        task.recurrence && task.recurrence !== "none" && task.dueDate
+          ? { ...task, dueDate: advanceDate(task.dueDate, task.recurrence), done: false }
+          : { ...task, done: true };
       writeAll(tasks);
       return tasks[index];
     },

@@ -44,9 +44,9 @@ Rules for autonomous sessions:
 - [x] Today screen: list of tasks due today / overdue, check off with a satisfying animation
 - [x] Add/edit task form (title, notes, due date, priority) as an in-page panel like Settings
 - [x] Task lists/projects (create, rename, delete; tasks belong to a list)
-- [ ] Recurring tasks (daily/weekly/monthly)
+- [x] Recurring tasks (daily/weekly/monthly)
 - [ ] All-tasks view with filters (list, done/undone, search)
-- [ ] Tests for task store: add/edit/complete/delete, recurrence rollover
+- [x] Tests for task store: add/edit/complete/delete, recurrence rollover
 
 ## Phase 2 — Personal CRM
 - [ ] Person record shape: id, name, photo color, tags, birthday, notes

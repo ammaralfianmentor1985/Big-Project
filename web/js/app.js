@@ -72,7 +72,7 @@ function renderToday() {
       event.stopPropagation();
       row.classList.add("task-tile-done");
       window.setTimeout(() => {
-        Tasks.update(task.id, { done: true });
+        Tasks.complete(task.id);
         renderToday();
       }, 220);
     });
@@ -91,11 +91,26 @@ function renderToday() {
     label.textContent = task.title;
     row.appendChild(label);
 
-    const badge = document.createElement("div");
-    badge.className = "trailing";
-    badge.textContent = overdue ? t("todayOverdueBadge") : t("todayDueTodayBadge");
-    if (overdue) badge.style.color = "var(--berry)";
-    row.appendChild(badge);
+    const trailing = document.createElement("div");
+    trailing.className = "trailing";
+    trailing.style.display = "flex";
+    trailing.style.alignItems = "center";
+    trailing.style.gap = "4px";
+
+    if (task.recurrence && task.recurrence !== "none") {
+      const repeatIcon = document.createElement("span");
+      repeatIcon.style.display = "inline-flex";
+      repeatIcon.innerHTML =
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>';
+      trailing.appendChild(repeatIcon);
+    }
+
+    const badgeText = document.createElement("span");
+    badgeText.textContent = overdue ? t("todayOverdueBadge") : t("todayDueTodayBadge");
+    if (overdue) badgeText.style.color = "var(--berry)";
+    trailing.appendChild(badgeText);
+
+    row.appendChild(trailing);
 
     listEl.appendChild(row);
   });
@@ -131,6 +146,7 @@ function openTaskForm(taskId) {
   document.getElementById("task-notes").value = task ? task.notes : "";
   document.getElementById("task-due-date").value = task ? (task.dueDate || "") : todayDateOnly();
   document.getElementById("task-priority").value = task ? task.priority : "none";
+  document.getElementById("task-recurrence").value = task ? (task.recurrence || "none") : "none";
   document.getElementById("task-delete").hidden = !editingTaskId;
 
   renderTaskFormListOptions();
@@ -155,6 +171,7 @@ function saveTaskForm() {
     dueDate: document.getElementById("task-due-date").value || null,
     priority: document.getElementById("task-priority").value,
     listId: document.getElementById("task-list").value || null,
+    recurrence: document.getElementById("task-recurrence").value,
   };
 
   if (editingTaskId) Tasks.update(editingTaskId, fields);

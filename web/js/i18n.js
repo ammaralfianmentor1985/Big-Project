@@ -55,6 +55,11 @@ const STRINGS = {
     listsNewListHint: "New list name",
     taskFieldList: "List",
     taskListNone: "No list",
+    taskFieldRepeat: "Repeat",
+    recurrenceNone: "Never",
+    recurrenceDaily: "Daily",
+    recurrenceWeekly: "Weekly",
+    recurrenceMonthly: "Monthly",
 
     settingsTitle: "Settings",
     settingsAppearance: "Appearance",
@@ -137,6 +142,11 @@ const STRINGS = {
     listsNewListHint: "Nama daftar baru",
     taskFieldList: "Daftar",
     taskListNone: "Tanpa daftar",
+    taskFieldRepeat: "Ulangi",
+    recurrenceNone: "Tidak pernah",
+    recurrenceDaily: "Harian",
+    recurrenceWeekly: "Mingguan",
+    recurrenceMonthly: "Bulanan",
 
     settingsTitle: "Pengaturan",
     settingsAppearance: "Tampilan",

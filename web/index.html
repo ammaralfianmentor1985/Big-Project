@@ -212,6 +212,15 @@
           <label data-t="taskFieldList"></label>
           <select id="task-list"></select>
         </div>
+        <div class="settings-row">
+          <label data-t="taskFieldRepeat"></label>
+          <select id="task-recurrence">
+            <option value="none" data-t="recurrenceNone"></option>
+            <option value="daily" data-t="recurrenceDaily"></option>
+            <option value="weekly" data-t="recurrenceWeekly"></option>
+            <option value="monthly" data-t="recurrenceMonthly"></option>
+          </select>
+        </div>
       </div>
       <div style="display:flex; gap:12px; padding:16px 20px 0;">
         <button class="btn btn-filled" id="task-save" data-t="actionSave" style="flex:1;"></button>
