@@ -314,6 +314,15 @@ label { font-size: 14px; font-weight: 600; }
   .task-tile-done { transition: none; }
 }
 
+/* Lists screen: name doubles as an inline rename field */
+.list-tile input.lists-name-input {
+  border: none;
+  background: transparent;
+  padding: 4px 0;
+  font-weight: 600;
+  width: auto;
+}
+
 .section-title {
   padding: 0 20px;
   margin-top: 8px;

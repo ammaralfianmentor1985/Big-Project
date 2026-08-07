@@ -101,6 +101,26 @@ function renderToday() {
   });
 }
 
+function renderTaskFormListOptions() {
+  const select = document.getElementById("task-list");
+  const current = select.value;
+
+  select.innerHTML = "";
+  const noneOption = document.createElement("option");
+  noneOption.value = "";
+  noneOption.textContent = t("taskListNone");
+  select.appendChild(noneOption);
+
+  Lists.getAll().forEach((list) => {
+    const option = document.createElement("option");
+    option.value = list.id;
+    option.textContent = list.name;
+    select.appendChild(option);
+  });
+
+  select.value = current;
+}
+
 function openTaskForm(taskId) {
   editingTaskId = taskId || null;
   const task = editingTaskId ? Tasks.get(editingTaskId) : null;
@@ -112,6 +132,9 @@ function openTaskForm(taskId) {
   document.getElementById("task-due-date").value = task ? (task.dueDate || "") : todayDateOnly();
   document.getElementById("task-priority").value = task ? task.priority : "none";
   document.getElementById("task-delete").hidden = !editingTaskId;
+
+  renderTaskFormListOptions();
+  document.getElementById("task-list").value = task ? (task.listId || "") : "";
 
   document.querySelectorAll("[data-screen]").forEach((el) => {
     el.classList.toggle("active", el.id === "screen-task-form");
@@ -131,6 +154,7 @@ function saveTaskForm() {
     notes: document.getElementById("task-notes").value,
     dueDate: document.getElementById("task-due-date").value || null,
     priority: document.getElementById("task-priority").value,
+    listId: document.getElementById("task-list").value || null,
   };
 
   if (editingTaskId) Tasks.update(editingTaskId, fields);
@@ -142,6 +166,81 @@ function saveTaskForm() {
 function deleteTaskForm() {
   if (editingTaskId) Tasks.remove(editingTaskId);
   closeTaskForm();
+}
+
+const LIST_DOT_COLORS = ["--teal", "--grape", "--berry", "--leaf", "--sun", "--mango"];
+
+function renderLists() {
+  const lists = Lists.getAll();
+  const container = document.getElementById("lists-items");
+  const emptyEl = document.getElementById("lists-empty");
+
+  container.innerHTML = "";
+  if (lists.length === 0) {
+    container.hidden = true;
+    emptyEl.hidden = false;
+    return;
+  }
+  emptyEl.hidden = true;
+  container.hidden = false;
+
+  lists.forEach((list, index) => {
+    const row = document.createElement("div");
+    row.className = "list-tile";
+
+    const dot = document.createElement("span");
+    dot.className = "priority-dot";
+    dot.style.background = `var(${LIST_DOT_COLORS[index % LIST_DOT_COLORS.length]})`;
+    row.appendChild(dot);
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "lists-name-input";
+    input.value = list.name;
+    input.addEventListener("change", () => {
+      const name = input.value.trim();
+      if (name) Lists.rename(list.id, name);
+      else input.value = list.name;
+    });
+    row.appendChild(input);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "btn btn-text";
+    deleteBtn.style.padding = "8px";
+    deleteBtn.setAttribute("aria-label", "Delete list");
+    deleteBtn.innerHTML =
+      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg>';
+    deleteBtn.addEventListener("click", () => {
+      Tasks.getAll()
+        .filter((task) => task.listId === list.id)
+        .forEach((task) => Tasks.update(task.id, { listId: null }));
+      Lists.remove(list.id);
+      renderLists();
+    });
+    row.appendChild(deleteBtn);
+
+    container.appendChild(row);
+  });
+}
+
+function openLists() {
+  renderLists();
+  document.querySelectorAll("[data-screen]").forEach((el) => {
+    el.classList.toggle("active", el.id === "screen-lists");
+  });
+}
+
+function closeLists() {
+  showTab("more");
+}
+
+function addList() {
+  const input = document.getElementById("new-list-name");
+  const name = input.value.trim();
+  if (!name) return;
+  Lists.add({ name });
+  input.value = "";
+  renderLists();
 }
 
 function refreshChatGate() {
@@ -202,6 +301,10 @@ function wireEvents() {
   document.getElementById("task-form-back").addEventListener("click", closeTaskForm);
   document.getElementById("task-save").addEventListener("click", saveTaskForm);
   document.getElementById("task-delete").addEventListener("click", deleteTaskForm);
+
+  document.getElementById("open-lists").addEventListener("click", openLists);
+  document.getElementById("lists-back").addEventListener("click", closeLists);
+  document.getElementById("add-list").addEventListener("click", addList);
 }
 
 function init() {

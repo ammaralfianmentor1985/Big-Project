@@ -45,8 +45,16 @@ const STRINGS = {
     moreJournal: "Journal",
     moreStudy: "Study",
     moreDecks: "Slide decks",
+    moreLists: "Lists",
     moreSettings: "Settings",
     comingSoon: "Coming soon",
+
+    listsTitle: "Lists",
+    listsEmptyTitle: "No lists yet",
+    listsEmptyBody: "Create a list to group related tasks together.",
+    listsNewListHint: "New list name",
+    taskFieldList: "List",
+    taskListNone: "No list",
 
     settingsTitle: "Settings",
     settingsAppearance: "Appearance",
@@ -73,6 +81,7 @@ const STRINGS = {
     actionClear: "Clear",
     actionBack: "Back",
     actionDelete: "Delete",
+    actionAdd: "Add",
   },
   id: {
     appName: "Satu",
@@ -118,8 +127,16 @@ const STRINGS = {
     moreJournal: "Jurnal",
     moreStudy: "Belajar",
     moreDecks: "Presentasi",
+    moreLists: "Daftar",
     moreSettings: "Pengaturan",
     comingSoon: "Segera hadir",
+
+    listsTitle: "Daftar",
+    listsEmptyTitle: "Belum ada daftar",
+    listsEmptyBody: "Buat daftar untuk mengelompokkan tugas yang berkaitan.",
+    listsNewListHint: "Nama daftar baru",
+    taskFieldList: "Daftar",
+    taskListNone: "Tanpa daftar",
 
     settingsTitle: "Pengaturan",
     settingsAppearance: "Tampilan",
@@ -146,6 +163,7 @@ const STRINGS = {
     actionClear: "Hapus",
     actionBack: "Kembali",
     actionDelete: "Hapus",
+    actionAdd: "Tambah",
   },
 };
 

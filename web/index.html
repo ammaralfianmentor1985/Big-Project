@@ -101,6 +101,13 @@
           <div class="label" data-t="moreDecks"></div>
           <div class="trailing" data-t="comingSoon"></div>
         </div>
+        <div class="list-tile" id="open-lists" style="cursor:pointer">
+          <div class="leading" style="background: rgb(var(--teal-rgb) / 0.15)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="4" rx="1.5"/><rect x="4" y="12" width="16" height="4" rx="1.5"/><rect x="4" y="19" width="10" height="1.5" rx="0.75"/></svg>
+          </div>
+          <div class="label" data-t="moreLists"></div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
         <div class="list-tile" id="open-settings" style="cursor:pointer">
           <div class="leading" style="background: rgb(var(--mango-rgb) / 0.15)">
             <svg viewBox="0 0 24 24" fill="none" stroke="var(--mango)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V19a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H4a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H10a1.7 1.7 0 0 0 1-1.5V4a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V10a1.7 1.7 0 0 0 1.5 1H20a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
@@ -201,10 +208,38 @@
             <option value="high" data-t="priorityHigh"></option>
           </select>
         </div>
+        <div class="settings-row">
+          <label data-t="taskFieldList"></label>
+          <select id="task-list"></select>
+        </div>
       </div>
       <div style="display:flex; gap:12px; padding:16px 20px 0;">
         <button class="btn btn-filled" id="task-save" data-t="actionSave" style="flex:1;"></button>
         <button class="btn btn-text" id="task-delete" data-t="actionDelete" hidden></button>
+      </div>
+    </main>
+  </section>
+
+  <!-- ===== Lists (opened from More, not a tab) ===== -->
+  <section id="screen-lists" class="screen" data-screen>
+    <header class="app-bar" style="display:flex; align-items:center; gap:12px;">
+      <button class="btn btn-text" id="lists-back" style="padding:8px;" aria-label="Back">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h1 data-t="listsTitle" style="font-size:22px;"></h1>
+    </header>
+    <main>
+      <div class="card settings-card" style="display:flex; gap:12px;">
+        <input type="text" id="new-list-name" data-t-placeholder="listsNewListHint" autocomplete="off">
+        <button class="btn btn-filled" id="add-list" data-t="actionAdd" style="white-space:nowrap;"></button>
+      </div>
+      <div id="lists-items" hidden style="display:flex; flex-direction:column; gap:10px; padding:8px 20px 24px;"></div>
+      <div class="empty-state" id="lists-empty">
+        <div class="icon-circle" style="background: rgb(var(--teal-rgb) / 0.15)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="4" rx="1.5"/><rect x="4" y="12" width="16" height="4" rx="1.5"/><rect x="4" y="19" width="10" height="1.5" rx="0.75"/></svg>
+        </div>
+        <h2 data-t="listsEmptyTitle"></h2>
+        <p data-t="listsEmptyBody"></p>
       </div>
     </main>
   </section>
@@ -244,6 +279,7 @@
   <script src="js/storage.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/tasks.js"></script>
+  <script src="js/lists.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
