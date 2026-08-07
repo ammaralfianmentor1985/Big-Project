@@ -49,8 +49,8 @@ Rules for autonomous sessions:
 - [x] Tests for task store: add/edit/complete/delete, recurrence rollover
 
 ## Phase 2 — Personal CRM
-- [ ] Person record shape: id, name, photo color, tags, birthday, notes
-- [ ] People screen: searchable contact list
+- [x] Person record shape: id, name, photo color, tags, birthday, notes
+- [x] People screen: searchable contact list
 - [ ] Person detail panel: notes, interaction log (call/met/message + date + note)
 - [ ] Follow-up reminders (surface "reach out to X" on Today screen)
 - [ ] Birthdays and important dates on Today screen

@@ -21,6 +21,7 @@ function showTab(name) {
     el.classList.toggle("active", el.id === `screen-${name}`);
   });
   if (name === "today") renderToday();
+  if (name === "people") renderPeople();
 }
 
 function todayDateOnly() {
@@ -183,6 +184,102 @@ function saveTaskForm() {
 function deleteTaskForm() {
   if (editingTaskId) Tasks.remove(editingTaskId);
   closeTaskForm();
+}
+
+let editingPersonId = null;
+
+function renderPeople() {
+  const query = document.getElementById("people-search").value;
+  const results = People.search(query);
+
+  const container = document.getElementById("people-items");
+  const emptyEl = document.getElementById("people-empty");
+
+  container.innerHTML = "";
+  if (results.length === 0) {
+    container.hidden = true;
+    emptyEl.hidden = false;
+    const hasAnyPeople = People.getAll().length > 0;
+    document.getElementById("people-empty-title").textContent =
+      t(hasAnyPeople ? "peopleNoMatchesTitle" : "peopleEmptyTitle");
+    document.getElementById("people-empty-body").textContent =
+      t(hasAnyPeople ? "peopleNoMatchesBody" : "peopleEmptyBody");
+    return;
+  }
+  emptyEl.hidden = true;
+  container.hidden = false;
+
+  results.forEach((person) => {
+    const row = document.createElement("div");
+    row.className = "list-tile";
+    row.style.cursor = "pointer";
+    row.addEventListener("click", () => openPersonForm(person.id));
+
+    const avatar = document.createElement("div");
+    avatar.className = "avatar-circle";
+    avatar.style.background = `var(${person.photoColor})`;
+    avatar.textContent = (person.name[0] || "?").toUpperCase();
+    row.appendChild(avatar);
+
+    const label = document.createElement("div");
+    label.className = "label";
+    label.textContent = person.name;
+    row.appendChild(label);
+
+    if (person.tags.length > 0) {
+      const trailing = document.createElement("div");
+      trailing.className = "trailing";
+      trailing.textContent = person.tags.join(", ");
+      row.appendChild(trailing);
+    }
+
+    container.appendChild(row);
+  });
+}
+
+function openPersonForm(personId) {
+  editingPersonId = personId || null;
+  const person = editingPersonId ? People.get(editingPersonId) : null;
+
+  document.getElementById("person-form-title").textContent =
+    t(editingPersonId ? "personFormTitleEdit" : "personFormTitleNew");
+  document.getElementById("person-name").value = person ? person.name : "";
+  document.getElementById("person-tags").value = person ? person.tags.join(", ") : "";
+  document.getElementById("person-birthday").value =
+    person && person.birthday ? `2000-${person.birthday}` : "";
+  document.getElementById("person-notes").value = person ? person.notes : "";
+  document.getElementById("person-delete").hidden = !editingPersonId;
+
+  document.querySelectorAll("[data-screen]").forEach((el) => {
+    el.classList.toggle("active", el.id === "screen-person-form");
+  });
+}
+
+function closePersonForm() {
+  showTab("people");
+}
+
+function savePersonForm() {
+  const name = document.getElementById("person-name").value.trim();
+  if (!name) return;
+
+  const birthdayValue = document.getElementById("person-birthday").value;
+  const fields = {
+    name,
+    tags: document.getElementById("person-tags").value.split(",").map((tag) => tag.trim()).filter(Boolean),
+    birthday: birthdayValue ? birthdayValue.slice(5) : null,
+    notes: document.getElementById("person-notes").value,
+  };
+
+  if (editingPersonId) People.update(editingPersonId, fields);
+  else People.add(fields);
+
+  closePersonForm();
+}
+
+function deletePersonForm() {
+  if (editingPersonId) People.remove(editingPersonId);
+  closePersonForm();
 }
 
 function renderAllTasksListFilterOptions() {
@@ -432,6 +529,12 @@ function wireEvents() {
   document.getElementById("all-tasks-search").addEventListener("input", renderAllTasks);
   document.getElementById("all-tasks-filter-list").addEventListener("change", renderAllTasks);
   document.getElementById("all-tasks-filter-status").addEventListener("change", renderAllTasks);
+
+  document.getElementById("people-add").addEventListener("click", () => openPersonForm(null));
+  document.getElementById("people-search").addEventListener("input", renderPeople);
+  document.getElementById("person-form-back").addEventListener("click", closePersonForm);
+  document.getElementById("person-save").addEventListener("click", savePersonForm);
+  document.getElementById("person-delete").addEventListener("click", deletePersonForm);
 }
 
 function init() {
