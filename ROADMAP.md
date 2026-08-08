@@ -57,10 +57,10 @@ Rules for autonomous sessions:
 - [x] Tests for people store: CRUD, interaction log, birthday lookup
 
 ## Phase 3 — AI core
-- [ ] Anthropic API client (`web/js/ai.js`): `fetch` call to the Messages API with the
-      `anthropic-dangerous-direct-browser-access` header — verify the exact header name
-      against current Anthropic docs before relying on it, since browser-access support
-      has changed before
+- [x] Anthropic API client (`web/js/ai.js`): `fetch` call to the Messages API with the
+      `anthropic-dangerous-direct-browser-access` header — verified against current docs
+      (still current/documented as of this check: https://simonwillison.net/2024/Aug/23/anthropic-dangerous-direct-browser-access/).
+      No UI wiring yet — that's the Settings test-connection button and Chat screen, next up.
 - [ ] API key management in Settings: test-connection button using the client above
 - [ ] Chat screen: real conversation with Claude (default model from `Store.getModel()`,
       selectable in Settings; models are `claude-opus-5` / `claude-sonnet-5` / `claude-haiku-4-5`)
