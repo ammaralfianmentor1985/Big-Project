@@ -20,6 +20,7 @@ const STRINGS = {
     todayFollowUpsTitle: "Reach out to",
     todayFollowUpOverdue: "Overdue",
     todayFollowUpToday: "Today",
+    todayQuickResearchHint: "Ask anything…",
 
     taskFormTitleNew: "New task",
     taskFormTitleEdit: "Edit task",
@@ -153,6 +154,7 @@ const STRINGS = {
     todayFollowUpsTitle: "Hubungi",
     todayFollowUpOverdue: "Terlambat",
     todayFollowUpToday: "Hari ini",
+    todayQuickResearchHint: "Tanya apa saja…",
 
     taskFormTitleNew: "Tugas baru",
     taskFormTitleEdit: "Ubah tugas",

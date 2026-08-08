@@ -64,7 +64,7 @@ Rules for autonomous sessions:
 - [x] API key management in Settings: test-connection button using the client above
 - [x] Chat screen: real conversation with Claude (default model from `Store.getModel()`,
       selectable in Settings; models are `claude-opus-5` / `claude-sonnet-5` / `claude-haiku-4-5`)
-- [ ] Quick research: ask-anything box on Today screen that opens the chat pre-filled
+- [x] Quick research: ask-anything box on Today screen that opens the chat pre-filled
 - [ ] Contextual AI: "break this task into subtasks" on task detail
 - [ ] Contextual AI: "suggest a follow-up message" on person detail
 - [ ] Graceful no-key state everywhere (already scaffolded in Chat) + link to

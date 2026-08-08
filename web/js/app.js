@@ -703,6 +703,18 @@ async function sendChatMessage() {
   }
 }
 
+function submitQuickResearch() {
+  const input = document.getElementById("quick-research-input");
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = "";
+
+  showTab("chat");
+  const chatInput = document.getElementById("chat-input");
+  chatInput.value = text;
+  chatInput.focus();
+}
+
 function showApiKeyStatus(message, color) {
   const statusEl = document.getElementById("api-key-status");
   statusEl.textContent = message;
@@ -794,6 +806,14 @@ function wireEvents() {
     if (event.key === "Enter") {
       event.preventDefault();
       sendChatMessage();
+    }
+  });
+
+  document.getElementById("quick-research-send").addEventListener("click", submitQuickResearch);
+  document.getElementById("quick-research-input").addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      submitQuickResearch();
     }
   });
 
