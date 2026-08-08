@@ -3,8 +3,8 @@
 **Satu** (Indonesian for "one") is a personal all-in-one life app: to-do lists, a personal
 CRM, journaling, study tools, AI-powered research and slide decks — everything in one place.
 
-Built with **Flutter**, so the same codebase runs as a web app today and as native
-iOS / Android / Windows / macOS apps later.
+Built as a **plain HTML, CSS and JavaScript site** — no framework, no build step, no
+compiler. Every file in [`web/`](web/) is served exactly as written.
 
 ## One-time setup (do this once, then never again)
 
@@ -14,7 +14,7 @@ an automated workflow do this for you, so it needs one manual click:
 1. Go to **Settings → Pages** in this repository.
 2. Under **Build and deployment → Source**, choose **GitHub Actions**.
 
-That's it. Every push now builds the app and publishes it automatically.
+That's it. Every push now validates and publishes the app automatically.
 
 ## Use it on your iPhone
 
@@ -34,15 +34,23 @@ The key is pasted once in **Settings** and stored only on your device.
 
 ## Development
 
-The app lives in [`app/`](app/). This project is built autonomously by scheduled Claude
+The app lives in [`web/`](web/). This project is built autonomously by scheduled Claude
 sessions following [`ROADMAP.md`](ROADMAP.md).
 
+There is nothing to install and nothing to build — it's just files:
+
 ```bash
-cd app
-flutter pub get
-flutter run -d chrome        # run locally
-flutter analyze && flutter test
-flutter build web --base-href "/Big-Project/"
+cd web
+python3 -m http.server 8000   # or any static file server
+# open http://localhost:8000
 ```
 
-Every push to the working branch redeploys the web app via GitHub Actions → GitHub Pages.
+Run the test suite (Node's built-in test runner, no dependencies to install):
+
+```bash
+node --test
+```
+
+Every push to the working branch runs the checks in
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml); pushes to `main` also
+redeploy the site via GitHub Actions → GitHub Pages.

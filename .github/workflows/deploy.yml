@@ -3,9 +3,9 @@
 #
 # GitHub's auto-created "github-pages" environment only accepts deployments
 # from the repo's default branch. The deploy job is gated to `main` below so
-# feature-branch PRs get real analyze/test/build validation without a
-# structurally-expected-to-fail deploy job turning CI red.
-name: Build and deploy Satu
+# feature-branch PRs still get validated without a structurally-doomed
+# deploy job turning CI red.
+name: Validate and deploy Satu
 
 on:
   push:
@@ -14,7 +14,6 @@ on:
       - claude/life-management-app-planning-vqsbsd
   workflow_dispatch:
 
-# Allow one concurrent deployment; newer pushes cancel in-progress runs.
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -25,44 +24,49 @@ permissions:
   id-token: write
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app
     steps:
       - uses: actions/checkout@v4
 
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
+      - name: Check every HTML file is well-formed
+        run: |
+          shopt -s globstar
+          for f in web/**/*.html; do
+            python3 -c "
+          import sys
+          from html.parser import HTMLParser
+          class Check(HTMLParser):
+              def error(self, message): sys.exit(f'HTML error in ${f}: {message}')
+          Check().feed(open('$f').read())
+          "
+          done
 
-      - name: Install dependencies
-        run: flutter pub get
+      - name: Check every JSON file is well-formed
+        run: |
+          shopt -s globstar
+          for f in web/**/*.json; do
+            python3 -c "import json; json.load(open('$f'))" || exit 1
+          done
 
-      - name: Analyze
-        run: flutter analyze
-
-      - name: Test
-        run: flutter test
-
-      - name: Build web
-        run: flutter build web --release --base-href "/Big-Project/"
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: app/build/web
+      - name: Run JS unit tests
+        run: node --test
 
   deploy:
-    needs: build
+    needs: validate
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
