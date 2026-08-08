@@ -82,12 +82,21 @@
         <p data-t="chatNeedsKeyBody"></p>
         <button class="btn btn-filled action" id="chat-open-settings" data-t="chatNeedsKeyAction"></button>
       </div>
-      <div class="empty-state" id="chat-ready" hidden>
-        <div class="icon-circle" style="background: rgb(var(--grape-rgb) / 0.15)">
-          <svg viewBox="0 0 24 24" fill="var(--grape)"><path d="M12 2l2.2 5.5L20 9.6l-5.5 2.3L12 17l-2.3-5.1L4 9.6l5.5-2.1z"/></svg>
+      <div id="chat-ready" hidden>
+        <div class="empty-state" id="chat-empty">
+          <div class="icon-circle" style="background: rgb(var(--grape-rgb) / 0.15)">
+            <svg viewBox="0 0 24 24" fill="var(--grape)"><path d="M12 2l2.2 5.5L20 9.6l-5.5 2.3L12 17l-2.3-5.1L4 9.6l5.5-2.1z"/></svg>
+          </div>
+          <h2 data-t="chatEmptyTitle"></h2>
+          <p data-t="chatEmptyBody"></p>
         </div>
-        <h2 data-t="chatEmptyTitle"></h2>
-        <p data-t="chatEmptyBody"></p>
+        <div id="chat-messages" class="chat-messages" hidden></div>
+        <div class="chat-input-row">
+          <input type="text" id="chat-input" data-t-placeholder="chatInputHint" autocomplete="off">
+          <button class="btn btn-filled chat-send-btn" id="chat-send" aria-label="Send message">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M13 5l7 7-7 7"/></svg>
+          </button>
+        </div>
       </div>
     </main>
   </section>

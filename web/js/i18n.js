@@ -66,6 +66,8 @@ const STRINGS = {
     chatNeedsKeyTitle: "Add an API key to start",
     chatNeedsKeyBody: "AI features need an Anthropic API key. It's stored only on this device.",
     chatNeedsKeyAction: "Open settings",
+    chatInputHint: "Ask anything…",
+    chatEmptyReply: "Claude didn't return a reply. Try again.",
 
     moreTitle: "More",
     moreJournal: "Journal",
@@ -197,6 +199,8 @@ const STRINGS = {
     chatNeedsKeyTitle: "Tambahkan kunci API untuk mulai",
     chatNeedsKeyBody: "Fitur AI memerlukan kunci API Anthropic. Kunci disimpan hanya di perangkat ini.",
     chatNeedsKeyAction: "Buka pengaturan",
+    chatInputHint: "Tanya apa saja…",
+    chatEmptyReply: "Claude tidak memberikan balasan. Coba lagi.",
 
     moreTitle: "Lainnya",
     moreJournal: "Jurnal",

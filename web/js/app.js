@@ -636,6 +636,73 @@ function refreshChatGate() {
   document.getElementById("chat-ready").hidden = !hasKey;
 }
 
+let chatMessages = []; // { role: "user"|"assistant"|"error", content, pending? }
+
+function renderChatMessages() {
+  const container = document.getElementById("chat-messages");
+  const emptyEl = document.getElementById("chat-empty");
+  container.innerHTML = "";
+
+  if (chatMessages.length === 0) {
+    container.hidden = true;
+    emptyEl.hidden = false;
+    return;
+  }
+  emptyEl.hidden = true;
+  container.hidden = false;
+
+  chatMessages.forEach((message) => {
+    const bubble = document.createElement("div");
+    bubble.className = `chat-message chat-message-${message.role}`;
+    if (message.pending) bubble.classList.add("chat-message-pending");
+    bubble.textContent = message.content;
+    container.appendChild(bubble);
+  });
+
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+}
+
+async function sendChatMessage() {
+  const input = document.getElementById("chat-input");
+  const text = input.value.trim();
+  if (!text) return;
+
+  const apiKey = Store.getApiKey();
+  if (!apiKey) return;
+
+  chatMessages.push({ role: "user", content: text });
+  input.value = "";
+
+  const pendingMessage = { role: "assistant", content: "…", pending: true };
+  chatMessages.push(pendingMessage);
+  renderChatMessages();
+
+  const button = document.getElementById("chat-send");
+  button.disabled = true;
+
+  try {
+    const apiMessages = chatMessages
+      .filter((m) => (m.role === "user" || m.role === "assistant") && !m.pending)
+      .map((m) => ({ role: m.role, content: m.content }));
+
+    const response = await AI.sendMessage({
+      apiKey,
+      model: Store.getModel(),
+      messages: apiMessages,
+      maxTokens: 1024,
+    });
+
+    pendingMessage.content = AI.textFromResponse(response) || t("chatEmptyReply");
+    pendingMessage.pending = false;
+  } catch (error) {
+    chatMessages = chatMessages.filter((m) => m !== pendingMessage);
+    chatMessages.push({ role: "error", content: error.message });
+  } finally {
+    button.disabled = false;
+    renderChatMessages();
+  }
+}
+
 function showApiKeyStatus(message, color) {
   const statusEl = document.getElementById("api-key-status");
   statusEl.textContent = message;
@@ -721,6 +788,14 @@ function wireEvents() {
   });
 
   document.getElementById("test-api-key").addEventListener("click", testApiKey);
+
+  document.getElementById("chat-send").addEventListener("click", sendChatMessage);
+  document.getElementById("chat-input").addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendChatMessage();
+    }
+  });
 
   document.getElementById("today-add-task").addEventListener("click", () => openTaskForm(null));
   document.getElementById("task-form-back").addEventListener("click", closeTaskForm);
