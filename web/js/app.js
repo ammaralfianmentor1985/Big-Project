@@ -636,11 +636,45 @@ function refreshChatGate() {
   document.getElementById("chat-ready").hidden = !hasKey;
 }
 
+function showApiKeyStatus(message, color) {
+  const statusEl = document.getElementById("api-key-status");
+  statusEl.textContent = message;
+  statusEl.style.color = color;
+  statusEl.hidden = false;
+}
+
+async function testApiKey() {
+  const apiKey = document.getElementById("input-api-key").value.trim();
+  if (!apiKey) {
+    showApiKeyStatus(t("settingsApiKeyNoKey"), "var(--berry)");
+    return;
+  }
+
+  const button = document.getElementById("test-api-key");
+  button.disabled = true;
+  showApiKeyStatus(t("settingsApiKeyTesting"), "var(--ink-soft)");
+
+  try {
+    await AI.sendMessage({
+      apiKey,
+      model: Store.getModel(),
+      messages: [{ role: "user", content: "Hi" }],
+      maxTokens: 8,
+    });
+    showApiKeyStatus(t("settingsApiKeyTestSuccess"), "var(--leaf)");
+  } catch (error) {
+    showApiKeyStatus(`${t("settingsApiKeyTestFailure")}: ${error.message}`, "var(--berry)");
+  } finally {
+    button.disabled = false;
+  }
+}
+
 function openSettings() {
   document.getElementById("select-locale").value = Store.getLocale() || "system";
   document.getElementById("select-theme").value = Store.getTheme();
   document.getElementById("input-api-key").value = Store.getApiKey();
   document.getElementById("select-model").value = Store.getModel();
+  document.getElementById("api-key-status").hidden = true;
   document.querySelectorAll("[data-screen]").forEach((el) => {
     el.classList.toggle("active", el.id === "screen-settings");
   });
@@ -676,13 +710,17 @@ function wireEvents() {
   document.getElementById("save-api-key").addEventListener("click", () => {
     Store.setApiKey(document.getElementById("input-api-key").value);
     refreshChatGate();
+    showApiKeyStatus(t("settingsApiKeySaved"), "var(--leaf)");
   });
 
   document.getElementById("clear-api-key").addEventListener("click", () => {
     Store.setApiKey("");
     document.getElementById("input-api-key").value = "";
     refreshChatGate();
+    showApiKeyStatus(t("settingsApiKeyCleared"), "var(--ink-soft)");
   });
+
+  document.getElementById("test-api-key").addEventListener("click", testApiKey);
 
   document.getElementById("today-add-task").addEventListener("click", () => openTaskForm(null));
   document.getElementById("task-form-back").addEventListener("click", closeTaskForm);
