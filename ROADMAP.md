@@ -54,7 +54,7 @@ Rules for autonomous sessions:
 - [x] Person detail panel: notes, interaction log (call/met/message + date + note)
 - [x] Follow-up reminders (surface "reach out to X" on Today screen)
 - [x] Birthdays and important dates on Today screen
-- [ ] Tests for people store: CRUD, interaction log, birthday lookup
+- [x] Tests for people store: CRUD, interaction log, birthday lookup
 
 ## Phase 3 — AI core
 - [ ] Anthropic API client (`web/js/ai.js`): `fetch` call to the Messages API with the

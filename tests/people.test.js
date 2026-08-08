@@ -45,6 +45,32 @@ test("successive people cycle through photo colors", () => {
   assert.notEqual(a.photoColor, b.photoColor);
 });
 
+test("photo colors wrap around once every color has been used", () => {
+  People.clearAll();
+  const colors = [];
+  for (let i = 0; i < 7; i++) {
+    colors.push(People.add({ name: `Person ${i}` }).photoColor);
+  }
+  const distinctColors = new Set(colors);
+  assert.equal(distinctColors.size, 6);
+  assert.equal(colors[6], colors[0]);
+});
+
+test("full CRUD lifecycle: add, read, update, then delete", () => {
+  People.clearAll();
+  const created = People.add({ name: "Lifecycle Test", tags: ["temp"], birthday: "05-20" });
+  assert.equal(People.get(created.id).name, "Lifecycle Test");
+  assert.equal(People.get(created.id).birthday, "05-20");
+
+  const updated = People.update(created.id, { name: "Renamed", tags: ["permanent"] });
+  assert.equal(updated.name, "Renamed");
+  assert.deepEqual(People.get(created.id).tags, ["permanent"]);
+
+  assert.equal(People.remove(created.id), true);
+  assert.equal(People.get(created.id), null);
+  assert.equal(People.getAll().length, 0);
+});
+
 test("added people are retrievable via getAll/get", () => {
   People.clearAll();
   const a = People.add({ name: "Ada" });
